@@ -1,0 +1,25 @@
+# Core Framework
+Flask==3.0.3
+Werkzeug==3.0.1
+
+# Data Processing
+pandas==2.2.2
+numpy==1.26.4
+
+# Machine Learning
+scikit-learn==1.5.0
+
+# Database
+# SQLite is built-in with Python, no need to install
+
+# Additional Flask Extensions (Optional but recommended)
+Flask-Cors==4.0.0
+
+# For better performance in production (optional)
+gunicorn==21.2.0
+
+# For environment variables (optional but recommended)
+python-dotenv==1.0.1
+
+# For data validation (optional but recommended)
+# jsonschema==4.20.0

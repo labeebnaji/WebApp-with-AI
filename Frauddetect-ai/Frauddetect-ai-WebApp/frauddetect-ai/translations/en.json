@@ -1,0 +1,105 @@
+{
+  "global": {
+    "app_name": "Velioon Cyber",
+    "toggle_language": "العربية",
+    "toggle_theme": "Toggle Theme",
+    "light_mode": "Light Mode",
+    "dark_mode": "Dark Mode",
+    "copyright": "© 2025 Velioon Cyber. All rights reserved.",
+    "run_model": "Run Model",
+    "submit_to_blockchain": "Submit to Blockchain",
+    "status": "Status",
+    "date": "Date",
+    "details": "Details",
+    "new": "New",
+    "reviewed": "Reviewed"
+  },
+  "navigation": {
+    "profile": "My Profile",
+    "dashboard": "Dashboard",
+    "upload_data": "Upload Data",
+    "analysis_results": "Analysis Results",
+    "ai_model": "AI Model",
+    "achievements": "Achievements",
+    "about_team": "About Team"
+  },
+  "dashboard_page": {
+        "title": "Dashboard",
+        "welcome_message": "Welcome to Fraud Detection Dashboard",
+        "threats_detected": "Threats Detected",
+        "suspicious_transactions": "Suspicious Transactions",
+        "security_score": "Security Score",
+        "threats_over_time": "Threats Over Time",
+        "attack_types": "Attack Types"
+    },
+"upload_page": {
+    "title": "Upload Transaction Data",
+    "description": "Upload your transaction CSV file to analyze with our model",
+    "drag_and_drop": "Drag & drop your file here",
+    "or": "or",
+    "browse_files": "Browse Files",
+    "data_preview": "Data Preview",
+    "run_model": "Run Model",
+    "fraud_detected": "Fraud Detected!",
+    "no_fraud": "No Fraud Detected",
+    "fraud_message": "Suspicious transactions detected in your data. Please review.",
+    "safe_message": "All your transactions appear legitimate with no signs of fraud.",
+    "results_title": "Analysis Results",
+    "cc_num": "Card Number",
+    "trans_date": "Date",
+    "trans_time": "Time",
+    "status": "Status",
+    "fraud": "Fraud",
+    "safe": "Safe"
+},
+
+  "model_page": {
+    "title": "Smart Model Interface",
+    "description": "This is a placeholder for the AI model interface. Upload a file to get a direct result.",
+    "model_result": "Model Result",
+    "fraud_probability": "Fraud Probability",
+    "risk_score": "Risk Score"
+  },
+"achievements_page": {
+    "title": "Achievements",
+    "description": "Track your progress and achievements within the system",
+    "achievement_finder": "Threat Finder",
+    "achievement_finder_desc": "Discovered your first security threat",
+    "achievement_expert": "Security Expert",
+    "achievement_expert_desc": "Discovered over 50 security threats",
+    "achievement_cyber_master": "Cybersecurity Master",
+    "achievement_cyber_master_desc": "Mastered all security modules",
+    "unlocked": "Unlocked",
+    "locked": "Locked",
+    "total_achievements": "Total Achievements",
+    "completion_rate": "Completion Rate"
+},
+  "team_page": {
+    "title": "Our Team",
+    "description": "The minds behind Velioon Cyber.",
+    "role": "Role",
+    "contact": "Contact"
+  },
+  "profile_page": {
+    "title": "Profile",
+    "full_name": "Full Name",
+    "username": "Username",
+    "email": "Email",
+    "role": "Current Role",
+    "social_links": "Social Links",
+    "edit_profile": "Edit Profile"
+  },
+      "alerts_page": {
+        "title": "Alerts & Analytics",
+        "description": "View fraud transactions details and statistics",
+        "total_transactions": "Total Transactions",
+        "fraud_transactions": "Fraud Transactions",
+        "safe_transactions": "Safe Transactions",
+        "amount": "Amount",
+        "category": "Category",
+        "threat_type": "Threat Type",
+        "fraud_detected": "Fraud Detected",
+        "safe_transaction": "Safe Transaction"
+    }
+}
+

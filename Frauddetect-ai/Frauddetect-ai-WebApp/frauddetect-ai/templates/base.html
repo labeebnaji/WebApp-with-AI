@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html 
+  lang="{{ g.lang }}" 
+  dir="{{ 'rtl' if g.lang == 'ar' else 'ltr' }}" 
+  style="--direction: {{ 'rtl' if g.lang == 'ar' else 'ltr' }};"
+  class="scroll-smooth"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ g.translations.global.app_description }}">
+    
+    <title>{{ g.translations.global.app_name }} - {% block title %}{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Font Awesome (للأيقونات) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    {% if request.path == url_for('index') %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% endif %}
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            font-family: 'Tajawal', 'Poppins', sans-serif;
+        }
+        
+        .rtl-support {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .ltr-support {
+            direction: ltr;
+            text-align: left;
+        }
+        .mobile-menu-button {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            z-index: 1001;
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        @media (max-width: 868px) {
+            .navbar {
+                position: relative;
+                padding: 1rem;
+            }
+            
+            .mobile-menu-button {
+                display: block;
+                position: absolute;
+                {% if g.lang == 'ar' %}left{% else %}right{% endif %}: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                {% if g.lang == 'ar' %}right{% else %}left{% endif %}: -100%;
+                width: 70%;
+                height: 100vh;
+                background: var(--card-bg);
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+                transition: {% if g.lang == 'ar' %}right{% else %}left{% endif %} 0.3s ease;
+                z-index: 1000;
+                padding-top: 5rem;
+            }
+            
+            .nav-links.active {
+                {% if g.lang == 'ar' %}right{% else %}left{% endif %}: 0;
+            }
+            
+            .nav-links a {
+                padding: 1rem 0;
+                border-bottom: 1px solid var(--border-color);
+                display: block;
+                width: 100%;
+            }
+            
+            .controls {
+                margin-left: auto;
+            }
+            
+            .lang-toggle-link span {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="{% if g.lang == 'ar' %}rtl-support{% else %}ltr-support{% endif %}">
+
+    <!-- شريط التنقل العلوي -->
+ <header class="navbar">
+        <a href="{{ url_for('index') }}" class="navbar-brand pulse">
+            <i class="fas fa-shield-alt"></i>
+            {{ g.translations.global.app_name }}
+        </a>
+        
+        <!-- زر القائمة الجانبية -->
+<button class="mobile-menu-button" id="mobileMenuButton">
+    <i class="fas fa-bars"></i>
+</button>
+        
+        <!-- طبقة التعتيم -->
+        <div class="overlay" id="overlay"></div>
+        
+        <!-- روابط التنقل -->
+        <nav class="nav-links" id="navLinks">
+            <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> {{ g.translations.navigation.dashboard }}</a>
+            <a href="{{ url_for('upload') }}"><i class="fas fa-upload"></i> {{ g.translations.navigation.upload_data }}</a>
+            <a href="{{ url_for('alerts') }}"><i class="fas fa-bell"></i> {{ g.translations.navigation.analysis_results }}</a>
+            <a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> {{ g.translations.navigation.profile }}</a>
+            <a href="{{ url_for('team') }}"><i class="fas fa-users"></i> {{ g.translations.navigation.about_team }}</a>
+            <a href="{{ url_for('achievements') }}"><i class="fas fa-trophy"></i> {{ g.translations.navigation.achievements }}</a>
+        </nav>
+
+        <div class="controls">
+            <a href="{{ request.path }}?lang={{ g.target_lang }}" class="lang-toggle-link">
+                <i class="fas fa-language"></i>
+                <span>{{ g.translations.global.toggle_language }}</span>
+            </a>
+            
+            <button id="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي للصفحة -->
+    <main>
+        {% block content %}
+        <!-- محتوى كل صفحة سيتم إدراجه هنا -->
+        {% endblock %}
+    </main>
+
+    <!-- التذييل -->
+    <footer>
+<p>&copy; {{ g.now.year }} {{ g.translations.global.app_name }}. {{ g.translations.global.copyright }}</p>    </footer>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    {% block scripts %}
+    <!-- سكريبتات إضافية للصفحات -->
+    {% endblock %}
+</body>
+</html>

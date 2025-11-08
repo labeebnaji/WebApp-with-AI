@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}{{ g.translations.profile_page.title }}{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h2>{{ g.translations.profile_page.title }}</h2>
+        <p>{{ g.translations.profile_page.welcome_message }}</p>
+    </div>
+    
+    <div class="profile-card">
+        <div class="profile-avatar">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        
+        <div class="profile-info">
+            <strong>{{ g.translations.profile_page.full_name }}:</strong>
+            <p>{{ user['full_name'] }}</p>
+        </div>
+        
+        <div class="profile-info">
+            <strong>{{ g.translations.profile_page.username }}:</strong>
+            <p>{{ user['username'] }}</p>
+        </div>
+        
+        <div class="profile-info">
+            <strong>{{ g.translations.profile_page.email }}:</strong>
+            <p>{{ user['email'] }}</p>
+        </div>
+        
+        <div class="profile-info">
+            <strong>{{ g.translations.profile_page.role }}:</strong>
+            <p>{{ user['role'] }}</p>
+        </div>
+        
+        <div class="profile-info">
+            <strong>{{ g.translations.profile_page.last_login }}:</strong>
+            <p>{{ user['last_login'] }}</p>
+        </div>
+        
+<div class="profile-info">
+    <strong>{{ g.translations.profile_page.last_login }}:</strong>
+    <p>{{ user.get('last_login', 'غير محدد') }}</p>
+</div>
+
+<div class="profile-info">
+    <strong>{{ g.translations.profile_page.social_links }}:</strong>
+    <div class="social-links">
+        {% if user.get('github_link') %}
+        <a href="{{ user.github_link }}" target="_blank" aria-label="GitHub">
+            <i class="fab fa-github"></i>
+        </a>
+        {% endif %}
+        
+        {% if user.get('linkedin_link') %}
+        <a href="{{ user.linkedin_link }}" target="_blank" aria-label="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+        </a>
+        {% endif %}
+        
+        {% if user.get('twitter_link') %}
+        <a href="{{ user.twitter_link }}" target="_blank" aria-label="Twitter">
+            <i class="fab fa-twitter"></i>
+        </a>
+        {% endif %}
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // تأثيرات الصورة الشخصية
+    const avatar = document.querySelector('.profile-avatar');
+    if (avatar) {
+        avatar.addEventListener('mouseenter', () => {
+            avatar.querySelector('.avatar-overlay').style.opacity = '1';
+        });
+        
+        avatar.addEventListener('mouseleave', () => {
+            avatar.querySelector('.avatar-overlay').style.opacity = '0';
+        });
+    }
+});
+</script>
+{% endblock %}

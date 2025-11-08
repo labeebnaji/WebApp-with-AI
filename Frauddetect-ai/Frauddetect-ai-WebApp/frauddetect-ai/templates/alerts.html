@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}{{ g.translations.navigation.analysis_results }}{% endblock %}
+
+{% block content %}
+<div class="alerts-container">
+    <div class="alerts-header">
+        <h2>{{ g.translations.alerts_page.title }}</h2>
+        <p>{{ g.translations.alerts_page.description }}</p>
+    </div>
+
+    <div class="alerts-stats">
+        <div class="stat-card">
+            <h3>{{ g.translations.alerts_page.total_transactions }}</h3>
+            <div class="stat-value">{{ stats.total_transactions }}</div>
+        </div>
+        <div class="stat-card danger">
+            <h3>{{ g.translations.alerts_page.fraud_transactions }}</h3>
+            <div class="stat-value">{{ stats.fraud_count }}</div>
+        </div>
+        <div class="stat-card success">
+            <h3>{{ g.translations.alerts_page.safe_transactions }}</h3>
+            <div class="stat-value">{{ stats.safe_count }}</div>
+        </div>
+    </div>
+
+    <div class="alerts-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ g.translations.global.date }}</th>
+                    <th>{{ g.translations.alerts_page.amount }}</th>
+                    <th>{{ g.translations.alerts_page.category }}</th>
+                    <th>{{ g.translations.alerts_page.threat_type }}</th>
+                    <th>{{ g.translations.global.status }}</th>
+                    <th>{{ g.translations.global.details }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr class="{% if transaction.prediction == 0 %}fraud{% else %}safe{% endif %}">
+                    <td>{{ transaction.trans_year }}-{{ transaction.trans_month }}-{{ transaction.trans_day }}</td>
+                    <td>{{ transaction.amt }} ريال</td>
+                    <td>{{ transaction.category }}</td>
+                    <td>
+                        {% if transaction.prediction == 0 %}
+                        {{ g.translations.alerts_page.fraud_detected }}
+                        {% else %}
+                        {{ g.translations.alerts_page.safe_transaction }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="status {% if transaction.prediction == 0 %}new{% else %}reviewed{% endif %}">
+                            {% if transaction.prediction == 0 %}
+                            {{ g.translations.global.new }}
+                            {% else %}
+                            {{ g.translations.global.reviewed }}
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="details-btn" data-id="{{ transaction.id }}">
+                            {{ g.translations.global.view_details }}
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+.alerts-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.alerts-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 200px;
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card.danger {
+    border-top: 4px solid var(--danger);
+}
+
+.stat-card.success {
+    border-top: 4px solid var(--success);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.alerts-table {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+tr.fraud {
+    background-color: rgba(255, 0, 0, 0.05);
+}
+
+tr.safe {
+    background-color: rgba(0, 255, 0, 0.05);
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.status.new {
+    background-color: var(--danger-light);
+    color: var(--danger);
+}
+
+.status.reviewed {
+    background-color: var(--success-light);
+    color: var(--success);
+}
+
+.details-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.details-btn:hover {
+    background: var(--primary-dark);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}{{ g.translations.navigation.achievements }}{% endblock %}
+
+{% block content %}
+<div class="achievements-container">
+    <div class="achievements-header">
+        <h2>{{ g.translations.achievements_page.title }}</h2>
+        <p>{{ g.translations.achievements_page.description }}</p>
+    </div>
+
+    <div class="achievements-grid">
+        <!-- الإنجاز الأول -->
+        <div class="achievement {% if achievements.finder %}unlocked{% else %}locked{% endif %}">
+            <div class="achievement-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="achievement-content">
+                <h3>{{ g.translations.achievements_page.achievement_finder }}</h3>
+                <p>{{ g.translations.achievements_page.achievement_finder_desc }}</p>
+                <span class="status">
+                    {% if achievements.finder %}
+                        <i class="fas fa-unlock"></i> {{ g.translations.achievements_page.unlocked }}
+                    {% else %}
+                        <i class="fas fa-lock"></i> {{ g.translations.achievements_page.locked }}
+                    {% endif %}
+                </span>
+            </div>
+            {% if achievements.finder %}
+            <div class="achievement-progress" style="width: 100%"></div>
+            {% else %}
+            <div class="achievement-progress" style="width: 30%"></div>
+            {% endif %}
+        </div>
+
+        <!-- الإنجاز الثاني -->
+        <div class="achievement {% if achievements.expert %}unlocked{% else %}locked{% endif %}">
+            <div class="achievement-icon">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="achievement-content">
+                <h3>{{ g.translations.achievements_page.achievement_expert }}</h3>
+                <p>{{ g.translations.achievements_page.achievement_expert_desc }}</p>
+                <span class="status">
+                    {% if achievements.expert %}
+                        <i class="fas fa-unlock"></i> {{ g.translations.achievements_page.unlocked }}
+                    {% else %}
+                        <i class="fas fa-lock"></i> {{ g.translations.achievements_page.locked }}
+                    {% endif %}
+                </span>
+            </div>
+            {% if achievements.expert %}
+            <div class="achievement-progress" style="width: 100%"></div>
+            {% else %}
+            <div class="achievement-progress" style="width: 60%"></div>
+            {% endif %}
+        </div>
+
+        <!-- الإنجاز الثالث -->
+        <div class="achievement {% if achievements.cyber_master %}unlocked{% else %}locked{% endif %}">
+            <div class="achievement-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="achievement-content">
+                <h3>{{ g.translations.achievements_page.achievement_cyber_master }}</h3>
+                <p>{{ g.translations.achievements_page.achievement_cyber_master_desc }}</p>
+                <span class="status">
+                    {% if achievements.cyber_master %}
+                        <i class="fas fa-unlock"></i> {{ g.translations.achievements_page.unlocked }}
+                    {% else %}
+                        <i class="fas fa-lock"></i> {{ g.translations.achievements_page.locked }}
+                    {% endif %}
+                </span>
+            </div>
+            {% if achievements.cyber_master %}
+            <div class="achievement-progress" style="width: 100%"></div>
+            {% else %}
+            <div class="achievement-progress" style="width: 10%"></div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="achievements-stats">
+        <div class="stat-card">
+            <h4>{{ g.translations.achievements_page.total_achievements }}</h4>
+            <div class="stat-value">{{ achievements.unlocked_count }}/{{ achievements.total_count }}</div>
+        </div>
+        <div class="stat-card">
+            <h4>{{ g.translations.achievements_page.completion_rate }}</h4>
+            <div class="stat-value">{{ achievements.completion_percentage }}%</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // تأثيرات عند التمرير
+    const achievements = document.querySelectorAll('.achievement');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    achievements.forEach((achievement, index) => {
+        achievement.style.opacity = 0;
+        achievement.style.transform = 'translateY(20px)';
+        achievement.style.transition = `all 0.5s ease ${index * 0.1}s`;
+        observer.observe(achievement);
+    });
+
+    // تأثيرات عند hover
+    achievements.forEach(achievement => {
+        achievement.addEventListener('mouseenter', () => {
+            achievement.style.transform = 'translateY(-5px)';
+        });
+        achievement.addEventListener('mouseleave', () => {
+            achievement.style.transform = 'translateY(0)';
+        });
+    });
+});
+</script>
+{% endblock %}

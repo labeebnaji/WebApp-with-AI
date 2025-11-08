@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}{{ g.translations.navigation.upload_data }}{% endblock %}
+
+{% block content %}
+<div class="upload-container {% if g.theme == 'dark' %}dark{% endif %}">
+    <!-- Result Section (Top of Page) -->
+    {% if results %}
+    <div class="result-summary animated fadeIn">
+        <div class="summary-card {% if results|selectattr('prediction', 'equalto', 0)|list %}fraud-detected{% else %}no-fraud{% endif %}">
+            <div class="summary-icon">
+                {% if results|selectattr('prediction', 'equalto', 0)|list %}
+                <i class="fas fa-exclamation-triangle pulse"></i>
+                {% else %}
+                <i class="fas fa-check-circle pulse"></i>
+                {% endif %}
+            </div>
+            <div class="summary-content">
+                <h3>
+                    {% if results|selectattr('prediction', 'equalto', 0)|list %}
+                    {{ g.translations.upload_page.fraud_detected }}
+                    {% else %}
+                    {{ g.translations.upload_page.no_fraud }}
+                    {% endif %}
+                </h3>
+                <p>
+                    {% if results|selectattr('prediction', 'equalto', 0)|list %}
+                    {{ g.translations.upload_page.fraud_message }}
+                    {% else %}
+                    {{ g.translations.upload_page.safe_message }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Upload Section -->
+    <div class="upload-header">
+        <h2>{{ g.translations.upload_page.title }}</h2>
+        <p>{{ g.translations.upload_page.description }}</p>
+    </div>
+
+    {% if error %}
+    <div class="alert alert-danger animated shake">
+        <i class="fas fa-exclamation-circle"></i> {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="upload-area" id="dropZone">
+        <form method="POST" enctype="multipart/form-data" class="upload-form">
+            <div class="upload-box {% if file_preview %}collapsed{% endif %}" id="uploadBox">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3>{{ g.translations.upload_page.drag_and_drop }}</h3>
+                <p>{{ g.translations.upload_page.or }}</p>
+                <button type="button" class="browse-btn" id="browseBtn">
+                    <i class="fas fa-folder-open"></i>
+                    {{ g.translations.upload_page.browse_files }}
+                </button>
+                <input type="file" id="fileInput" name="file" accept=".csv" style="display: none;">
+            </div>
+
+            {% if file_preview %}
+            <div class="data-preview animated fadeIn">
+                <h4><i class="fas fa-table"></i> {{ g.translations.upload_page.data_preview }}</h4>
+                <div class="preview-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                {% for col in file_preview.columns %}
+                                <th>{{ col }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in file_preview.rows %}
+                            <tr>
+                                {% for val in row %}
+                                <td>{{ val }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="run-model-btn" {% if not file_preview %}disabled{% endif %}>
+                <i class="fas fa-play"></i> {{ g.translations.upload_page.run_model }}
+            </button>
+        </form>
+    </div>
+
+    {% if results %}
+    <div class="results-container animated fadeInUp">
+        <h3><i class="fas fa-poll"></i> {{ g.translations.upload_page.results_title }}</h3>
+        <div class="table-responsive">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>{{ g.translations.upload_page.cc_num }}</th>
+                        <th>{{ g.translations.upload_page.trans_date }}</th>
+                        <th>{{ g.translations.upload_page.trans_time }}</th>
+                        <th>{{ g.translations.upload_page.status }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in results %}
+                    <tr class="{% if row.prediction == 0 %}fraud-row{% else %}safe-row{% endif %}">
+                        <td>{{ row.cc_num }}</td>
+                        <td>{{ row.trans_day }}/{{ row.trans_month }}/{{ row.trans_year }}</td>
+                        <td>{{ row.trans_hour }}:{{ row.trans_minute }}</td>
+                        <td>
+                            <span class="status-badge {% if row.prediction == 0 %}fraud{% else %}safe{% endif %}">
+                                {% if row.prediction == 0 %}
+                                <i class="fas fa-exclamation-circle"></i> {{ g.translations.upload_page.fraud }}
+                                {% else %}
+                                <i class="fas fa-check-circle"></i> {{ g.translations.upload_page.safe }}
+                                {% endif %}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dropZone = document.getElementById('dropZone');
+    const browseBtn = document.getElementById('browseBtn');
+    const fileInput = document.getElementById('fileInput');
+    const uploadBox = document.getElementById('uploadBox');
+    const runModelBtn = document.querySelector('.run-model-btn');
+
+    // Drag and drop functionality
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+        dropZone.classList.add('highlight');
+        uploadBox.classList.add('dragging');
+    }
+
+    function unhighlight() {
+        dropZone.classList.remove('highlight');
+        uploadBox.classList.remove('dragging');
+    }
+
+    dropZone.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        fileInput.files = files;
+        handleFileSelection();
+    }
+
+    browseBtn.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', handleFileSelection);
+
+    function handleFileSelection() {
+        if (fileInput.files.length > 0) {
+            uploadBox.classList.add('collapsed');
+            runModelBtn.disabled = false;
+            
+            // Here you would typically preview the file
+            // For now we'll just show that a file was selected
+            console.log("File selected:", fileInput.files[0].name);
+        }
+    }
+});
+</script>
+{% endblock %}

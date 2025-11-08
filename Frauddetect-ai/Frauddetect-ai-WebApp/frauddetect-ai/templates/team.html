@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{{ g.translations.navigation.about_team }}{% endblock %}
+
+{% block content %}
+<div class="team-container">
+    <div class="team-header">
+        <h2>{{ g.translations.team_page.title }}</h2>
+        <p>{{ g.translations.team_page.description }}</p>
+    </div>
+
+    <div class="team-grid">
+        <div class="team-member">
+            <div class="member-avatar">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <h3>أحمد الشامان</h3>
+            <p>{{ g.translations.team_page.role }}: مطور واجهة أمامية</p>
+            <p>{{ g.translations.team_page.contact }}: ahmed@velioon.com</p>
+            <div class="member-social">
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+
+        <div class="team-member">
+            <div class="member-avatar">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <h3>ريتاج التميمي</h3>
+            <p>{{ g.translations.team_page.role }}: مطورة خلفية</p>
+            <p>{{ g.translations.team_page.contact }}: fatima@velioon.com</p>
+            <div class="member-social">
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // تأثيرات أعضاء الفريق
+    const teamMembers = document.querySelectorAll('.team-member');
+    teamMembers.forEach(member => {
+        member.addEventListener('mousemove', (e) => {
+            const rect = member.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            member.style.setProperty('--mouse-x', `${x}px`);
+            member.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+});
+</script>
+{% endblock %}

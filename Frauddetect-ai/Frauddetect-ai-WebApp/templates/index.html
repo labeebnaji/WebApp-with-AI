@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}{{ g.translations.navigation.dashboard }}{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- عنوان الصفحة -->
+    <div class="dashboard-header">
+        <h2>{{ g.translations.dashboard_page.title }}</h2>
+        <p>{{ g.translations.dashboard_page.welcome_message }}</p>
+    </div>
+
+    <!-- كروت الإحصائيات -->
+    <div class="stats-grid">
+        <div class="stat-card threats">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-content">
+                <h3>{{ g.translations.dashboard_page.threats_detected }}</h3>
+                <div class="stat-number">{{ threats_count }}</div>
+                <p class="stat-change {% if threats_change >= 0 %}positive{% else %}negative{% endif %}">
+                    <i class="fas fa-arrow-{% if threats_change >= 0 %}up{% else %}down{% endif %}"></i>
+                    {{ "%.1f"|format(threats_change|abs) }}% عن الشهر الماضي
+                </p>
+            </div>
+        </div>
+
+        <div class="stat-card transactions">
+            <div class="stat-icon">💳</div>
+            <div class="stat-content">
+                <h3>{{ g.translations.dashboard_page.suspicious_transactions }}</h3>
+                <div class="stat-number">{{ fraud_count }}</div>
+                <p class="stat-change {% if fraud_percentage <= 5 %}positive{% else %}negative{% endif %}">
+                    <i class="fas fa-arrow-{% if fraud_percentage <= 5 %}down{% else %}up{% endif %}"></i>
+                    {{ "%.1f"|format(fraud_percentage) }}% من إجمالي المعاملات
+                </p>
+            </div>
+        </div>
+
+        <div class="stat-card security">
+            <div class="stat-icon">🛡️</div>
+            <div class="stat-content">
+                <h3>{{ g.translations.dashboard_page.security_score }}</h3>
+                <div class="stat-number">{{ "%.0f"|format(security_score) }}%</div>
+                <p class="stat-change {% if security_score >= 90 %}positive{% else %}negative{% endif %}">
+                    <i class="fas fa-arrow-{% if security_score >= 90 %}up{% else %}down{% endif %}"></i>
+                    {% if security_score >= 90 %}ممتاز{% else %}يحتاج تحسين{% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- الرسوم البيانية -->
+    <div class="charts-grid">
+        <!-- رسم بياني للتهديدات حسب الوقت -->
+        <div class="chart-container">
+            <h3>{{ g.translations.dashboard_page.threats_over_time }}</h3>
+            <div class="chart-wrapper">
+                <canvas id="threatsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- رسم بياني لأنواع الهجمات -->
+        <div class="chart-container">
+            <h3>{{ g.translations.dashboard_page.attack_types }}</h3>
+            <div class="chart-wrapper">
+                <canvas id="attackTypesChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- أزرار العمل السريع -->
+    <div class="quick-actions">
+        <a href="{{ url_for('upload') }}" class="action-btn primary">
+            <i class="fas fa-upload"></i>
+            {{ g.translations.navigation.upload_data }}
+        </a>
+        <a href="{{ url_for('alerts') }}" class="action-btn secondary">
+            <i class="fas fa-chart-bar"></i>
+            {{ g.translations.navigation.analysis_results }}
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // تأثيرات خاصة للكروت
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
+    // رسم بياني للتهديدات حسب الوقت
+    const threatsCtx = document.getElementById('threatsChart').getContext('2d');
+    const threatsChart = new Chart(threatsCtx, {
+        type: 'line',
+        data: {
+            labels: {{ threats_by_time|map(attribute='day')|list|tojson }},
+            datasets: [{
+                label: 'عدد التهديدات',
+                data: {{ threats_by_time|map(attribute='count')|list|tojson }},
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+
+    // رسم بياني لأنواع الهجمات
+    const attackTypesCtx = document.getElementById('attackTypesChart').getContext('2d');
+    const attackTypesChart = new Chart(attackTypesCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ attack_types|map(attribute='category')|list|tojson }},
+            datasets: [{
+                data: {{ attack_types|map(attribute='count')|list|tojson }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

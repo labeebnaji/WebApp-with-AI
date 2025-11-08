@@ -1,0 +1,102 @@
+{
+  "global": {
+    "app_name": "FraudDetect AI",
+    "toggle_language": "English",
+    "toggle_theme": "تبديل السمة",
+    "light_mode": "الوضع النهاري",
+    "dark_mode": "الوضع الليلي",
+    "copyright": "© 2025 FraudDetect AI. جميع الحقوق محفوظة.",
+    "run_model": "تشغيل النموذج",
+    "submit_to_blockchain": "إرسال إلى البلوكتشين",
+    "status": "الحالة",
+    "date": "التاريخ",
+    "details": "التفاصيل",
+    "new": "جديد",
+    "reviewed": "تمت مراجعته"
+  },
+  "navigation": {
+    "profile": "ملفي الشخصي",
+    "dashboard": "لوحة التحكم",
+    "upload_data": "رفع البيانات",
+    "analysis_results": "نتائج التحليل",
+    "ai_model": "النموذج",
+    "achievements": "الإنجازات"
+  },
+    "dashboard_page": {
+        "title": "لوحة التحكم",
+        "welcome_message": "مرحباً بك في لوحة تحليل المعاملات الاحتيالية",
+        "threats_detected": "التهديدات المكتشفة",
+        "suspicious_transactions": "معاملات مشبوهة",
+        "security_score": "مؤشر الأمان",
+        "threats_over_time": "التهديدات حسب الوقت",
+        "attack_types": "أنواع الهجمات"
+    },
+"upload_page": {
+    "title": "رفع بيانات المعاملات",
+    "description": "ارفع ملف معاملاتك بصيغة CSV لتحليلها باستخدام النموذج",
+    "drag_and_drop": "اسحب وأفلت ملفك هنا",
+    "or": "أو",
+    "browse_files": "تصفح الملفات",
+    "data_preview": "معاينة البيانات",
+    "run_model": "تشغيل النموذج",
+    "fraud_detected": "تم اكتشاف عمليات احتيالية!",
+    "no_fraud": "لا توجد عمليات احتيالية",
+    "fraud_message": "تم اكتشاف عمليات مشبوهة في معاملاتك. يرجى مراجعتها.",
+    "safe_message": "جميع معاملاتك سليمة ولا يوجد شبهة احتيال.",
+    "results_title": "نتائج التحليل",
+    "cc_num": "رقم البطاقة",
+    "trans_date": "التاريخ",
+    "trans_time": "الوقت",
+    "status": "الحالة",
+    "fraud": "احتيالية",
+    "safe": "سليمة"
+},
+
+  "model_page": {
+    "title": "واجهة النموذج الذكي",
+    "description": "هذه واجهة مؤقتة لنموذج الذكاء الاصطناعي. ارفع ملفًا للحصول على نتيجة مباشرة.",
+    "model_result": "نتيجة النموذج",
+    "fraud_probability": "احتمال الاحتيال",
+    "risk_score": "درجة الخطورة"
+  },
+"achievements_page": {
+    "title": "الإنجازات",
+    "description": "تتبع تقدمك وإنجازاتك في النظام",
+    "achievement_finder": "مكتشف التهديدات",
+    "achievement_finder_desc": "اكتشف أول تهديد أمني",
+    "achievement_expert": "خبير أمني",
+    "achievement_expert_desc": "اكتشف 50+ تهديد أمني",
+    "achievement_cyber_master": "سيد الأمن السيبراني",
+    "achievement_cyber_master_desc": "أتقن جميع وحدات الأمن",
+    "unlocked": "مفتوح",
+    "locked": "مقفل",
+    "total_achievements": "إجمالي الإنجازات",
+    "completion_rate": "معدل الإكمال"
+  },
+  "profile_page": {
+    "title": "الملف الشخصي",
+    "full_name": "الاسم الكامل",
+    "username": "اسم المستخدم",
+    "email": "البريد الإلكتروني",
+    "role": "الدور الحالي",
+    "social_links": "روابط التواصل",
+    "edit_profile": "تعديل الملف الشخصي"
+  },
+  
+
+    "alerts_page": {
+        "title": "الإنذارات والتحليلات",
+        "description": "عرض تفاصيل المعاملات الاحتيالية والإحصائيات",
+        "total_transactions": "إجمالي المعاملات",
+        "fraud_transactions": "معاملات احتيالية",
+        "safe_transactions": "معاملات سليمة",
+        "amount": "المبلغ",
+        "category": "الفئة",
+        "threat_type": "نوع التهديد",
+        "fraud_detected": "احتيال مكتشف",
+        "safe_transaction": "معاملة آمنة"
+    }
+
+
+}
+
